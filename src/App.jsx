@@ -78,7 +78,7 @@ function Hero() {
           <div className="relative">
             <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-xl ring-1 ring-black/5">
               <img
-                src="https://images.unsplash.com/photo-1577221084712-45b0445d2b00?q=80&w=1400&auto=format&fit=crop"
+                src="https://source.unsplash.com/1200x900/?treadmill,repair,technician"
                 alt="Technicien réparant un tapis de course à domicile"
                 className="w-full h-full object-cover"
                 loading="eager"
@@ -105,26 +105,26 @@ function Services() {
     {
       title: 'Réparation & dépannage',
       desc: 'Diagnostic précis, remplacement de pièces, remise en service de vos appareils.',
-      img: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=1200&auto=format&fit=crop',
-      alt: 'Réparation d’un vélo d’appartement',
+      img: 'https://source.unsplash.com/800x600/?treadmill,repair',
+      alt: 'Réparation d’un tapis de course par un technicien',
     },
     {
       title: 'Entretien préventif',
       desc: 'Nettoyage, lubrification, réglages et contrôle de sécurité pour prolonger la durée de vie.',
-      img: 'https://images.unsplash.com/photo-1579758682665-53a1a614eea6?q=80&w=1200&auto=format&fit=crop',
-      alt: 'Entretien d’un tapis de course',
+      img: 'https://source.unsplash.com/800x600/?elliptical,maintenance',
+      alt: 'Entretien d’un vélo elliptique et contrôle de sécurité',
     },
     {
       title: 'Installation & réglage',
       desc: 'Montage à domicile, mise à niveau, calibration et tests fonctionnels.',
-      img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=1200&auto=format&fit=crop',
-      alt: 'Installation d’un rameur à domicile',
+      img: 'https://source.unsplash.com/800x600/?rowing-machine,assembly',
+      alt: 'Installation et réglage d’un rameur à domicile',
     },
     {
       title: 'Pièces détachées',
       desc: 'Fourniture et pose de courroies, moteurs, consoles, capteurs et autres composants.',
-      img: 'https://images.unsplash.com/photo-1605640021353-f8b4a4b1ff54?q=80&w=1200&auto=format&fit=crop',
-      alt: 'Pièces détachées pour appareils de fitness',
+      img: 'https://source.unsplash.com/800x600/?gym,spare,parts,tools',
+      alt: 'Pièces détachées et outillage pour appareils de fitness',
     },
   ]
   return (
