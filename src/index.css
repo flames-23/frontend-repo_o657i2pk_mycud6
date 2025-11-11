@@ -12,17 +12,16 @@
     --font-manrope: 'Manrope', system-ui, sans-serif;
   }
 
-  html {
-    font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
+  html { font-family: var(--font-sans); font-feature-settings: "rlig" 1, "calt" 1; }
+  body { @apply antialiased text-gray-800; }
 
-  body {
-    @apply antialiased;
-  }
+  h1, h2, h3 { @apply tracking-tight; }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
+@layer components {
+  .container-p { @apply max-w-6xl mx-auto px-4 sm:px-6; }
+}
+
 @layer utilities {
   .animate-in {
     animation-name: animateIn;
