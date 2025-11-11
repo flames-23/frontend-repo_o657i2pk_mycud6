@@ -375,7 +375,7 @@ function GenerateImagesPanel({ onImages }) {
       const res = await fetch(`${backendUrl}/api/generate-images`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobs, model: 'stable-diffusion-xl-1024-v1-0' })
+        body: JSON.stringify({ jobs, model: 'gpt-image-1' })
       })
       if (!res.ok) {
         const err = await res.json().catch(() => ({}))
@@ -397,7 +397,7 @@ function GenerateImagesPanel({ onImages }) {
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div>
               <h3 className="font-semibold text-gray-900">Générer les visuels IA</h3>
-              <p className="mt-1 text-sm text-gray-600">Crée automatiquement 5 images adaptées aux sections du site. Nécessite la clé Stability côté serveur.</p>
+              <p className="mt-1 text-sm text-gray-600">Crée automatiquement 5 images adaptées aux sections du site.</p>
             </div>
             <button onClick={handleGenerate} disabled={loading} className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white text-sm font-medium px-4 py-2 rounded-md">
               {loading ? 'Génération…' : 'Générer les images'}
