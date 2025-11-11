@@ -44,7 +44,8 @@ function Header() {
   )
 }
 
-function Hero() {
+function Hero({ heroImg }) {
+  const defaultImg = "https://source.unsplash.com/1200x900/?treadmill,repair,technician"
   return (
     <section id="accueil" className="relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
@@ -78,7 +79,7 @@ function Hero() {
           <div className="relative">
             <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-xl ring-1 ring-black/5">
               <img
-                src="https://source.unsplash.com/1200x900/?treadmill,repair,technician"
+                src={heroImg || defaultImg}
                 alt="Technicien réparant un tapis de course à domicile"
                 className="w-full h-full object-cover"
                 loading="eager"
@@ -100,30 +101,30 @@ function CheckIcon() {
   )
 }
 
-function Services() {
+function Services({ images = [] }) {
   const services = [
     {
       title: 'Réparation & dépannage',
       desc: 'Diagnostic précis, remplacement de pièces, remise en service de vos appareils.',
-      img: 'https://source.unsplash.com/800x600/?treadmill,repair',
+      img: images[1] || 'https://source.unsplash.com/800x600/?treadmill,repair',
       alt: 'Réparation d’un tapis de course par un technicien',
     },
     {
       title: 'Entretien préventif',
       desc: 'Nettoyage, lubrification, réglages et contrôle de sécurité pour prolonger la durée de vie.',
-      img: 'https://source.unsplash.com/800x600/?elliptical,maintenance',
+      img: images[2] || 'https://source.unsplash.com/800x600/?elliptical,maintenance',
       alt: 'Entretien d’un vélo elliptique et contrôle de sécurité',
     },
     {
       title: 'Installation & réglage',
       desc: 'Montage à domicile, mise à niveau, calibration et tests fonctionnels.',
-      img: 'https://source.unsplash.com/800x600/?rowing-machine,assembly',
+      img: images[3] || 'https://source.unsplash.com/800x600/?rowing-machine,assembly',
       alt: 'Installation et réglage d’un rameur à domicile',
     },
     {
       title: 'Pièces détachées',
       desc: 'Fourniture et pose de courroies, moteurs, consoles, capteurs et autres composants.',
-      img: 'https://source.unsplash.com/800x600/?gym,spare,parts,tools',
+      img: images[4] || 'https://source.unsplash.com/800x600/?gym,spare,parts,tools',
       alt: 'Pièces détachées et outillage pour appareils de fitness',
     },
   ]
@@ -311,7 +312,107 @@ function Mentions() {
   )
 }
 
+function GenerateImagesPanel({ onImages }) {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || ''
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleGenerate = async () => {
+    if (!backendUrl) {
+      setError("Adresse du serveur non configurée (VITE_BACKEND_URL)")
+      return
+    }
+    setLoading(true)
+    setError('')
+    try {
+      const jobs = [
+        {
+          prompt: "Technicien professionnel réparant un tapis de course à domicile, capot moteur ouvert, tournevis et multimètre, salon moderne lumineux, parquet clair, câblage visible mais ordonné, expression concentrée, composition 3/4, profondeur de champ légère, photo réaliste, couleurs neutres avec accents vert émeraude, ambiance domestique européenne",
+          negative_prompt: "logo, brand names, gym commercial, messy background, text, watermark, extra fingers",
+          width: 1200,
+          height: 900,
+          cfg_scale: 6.5,
+          steps: 30,
+          samples: 1,
+        },
+        {
+          prompt: "Close-up mains du technicien testant le moteur d’un tapis de course avec un multimètre, câbles rouges et noirs, capot partiellement ouvert, outils posés proprement, lumière naturelle, textures nettes, photo macro réaliste",
+          negative_prompt: "logo, blurred, noisy, text, watermark",
+          width: 1200,
+          height: 900,
+          cfg_scale: 6.5,
+          steps: 30,
+          samples: 1,
+        },
+        {
+          prompt: "Technicien effectuant l’entretien d’un vélo elliptique, lubrification des articulations et serrage des vis, chiffon microfibre, bouteille de lubrifiant, intérieur domestique, lumière douce, ambiance propre et professionnelle, photo réaliste",
+          negative_prompt: "logo, sweat-soaked, messy, text",
+          width: 1200,
+          height: 900,
+          cfg_scale: 6.5,
+          steps: 30,
+          samples: 1,
+        },
+        {
+          prompt: "Montage et réglage d’un rameur à domicile, technicien alignant le rail et serrant les fixations, kit d’outils organisé, pièces au sol sur tapis de protection, cadrage large, photo réaliste, ambiance chaleureuse",
+          negative_prompt: "brand names, instruction manual visible, text, watermark",
+          width: 1200,
+          height: 900,
+          cfg_scale: 6.5,
+          steps: 30,
+          samples: 1,
+        },
+        {
+          prompt: "Flat lay soigné de pièces détachées de matériel de fitness: courroies, roulements, capteurs, visserie, moteur compact, carte électronique générique, outils (clés, tournevis), fond neutre gris clair, ombres douces, photo studio réaliste",
+          negative_prompt: "logo, text, labels, watermark",
+          width: 1200,
+          height: 900,
+          cfg_scale: 6.5,
+          steps: 30,
+          samples: 1,
+        },
+      ]
+      const res = await fetch(`${backendUrl}/api/generate-images`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobs, model: 'stable-diffusion-xl-1024-v1-0' })
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.detail?.error || err.detail || `Erreur ${res.status}`)
+      }
+      const data = await res.json()
+      onImages?.(data.images || [])
+    } catch (e) {
+      setError(e.message || 'Erreur inconnue')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <section className="bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        <div className="bg-white border border-gray-100 rounded-lg p-4 shadow-sm">
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div>
+              <h3 className="font-semibold text-gray-900">Générer les visuels IA</h3>
+              <p className="mt-1 text-sm text-gray-600">Crée automatiquement 5 images adaptées aux sections du site. Nécessite la clé Stability côté serveur.</p>
+            </div>
+            <button onClick={handleGenerate} disabled={loading} className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white text-sm font-medium px-4 py-2 rounded-md">
+              {loading ? 'Génération…' : 'Générer les images'}
+            </button>
+          </div>
+          {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function App() {
+  const [generated, setGenerated] = useState([])
+
   useEffect(() => {
     document.documentElement.classList.add('scroll-smooth')
   }, [])
@@ -319,10 +420,11 @@ export default function App() {
     <div className="min-h-screen bg-white text-gray-800">
       <Header />
       <main>
-        <Hero />
-        <Services />
+        <Hero heroImg={generated[0]} />
+        <Services images={generated} />
         <Marques />
         <Zone />
+        <GenerateImagesPanel onImages={setGenerated} />
         <Contact />
         <Mentions />
       </main>
